@@ -1,0 +1,33 @@
+/* Set base font and remove default spacing */
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
+
+/* Style the header aand make it stand out */
+header {
+  background-color: #222;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Style the tab buttons in the nav */
+nav button {
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+/* Hide pages by default */
+.page {
+  display: none;
+  padding: 1rem;
+}
+
+/* Show the active page */
+.page.active {
+  display: block;
+}

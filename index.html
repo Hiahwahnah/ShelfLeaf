@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShelfLeaf</title>
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>ShelfLeaf</h1>
+         <!-- Tab navigation buttons -->
+        <nav>
+            <button id="searchTab">Search</button>
+            <button id="libraryTab">My Library</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Search page: visible by default -->
+        <section id="searchPage" class="page active">
+            <input type="text" id="searchInput" placeholder="Search for books..."/>
+            <button id="searchBtn">Search</button>
+            <div id="searchResults"></div>
+        </section>
+
+        <!-- My Library page: hidden until toggled -->
+        <section id="libraryPage" class="page">
+            <h2>My Library</h2>
+            <div id="libraryList"></div>
+        </section>
+    </main>
+
+    <!-- Link to external JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
