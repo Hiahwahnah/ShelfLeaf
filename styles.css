@@ -1,4 +1,4 @@
-/* Set base font and remove default spacing */
+/* General Reset */
 body {
   font-family: sans-serif;
   margin: 0;
@@ -6,7 +6,7 @@ body {
   background-color: #f9f9f9;
 }
 
-/* Style the header aand make it stand out */
+/* Header & Navigation */
 header {
   background-color: #222;
   color: white;
@@ -14,20 +14,108 @@ header {
   text-align: center;
 }
 
-/* Style the tab buttons in the nav */
+nav {
+  margin-top: 1rem;
+}
+
 nav button {
   margin: 0.5rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
+  border: none;
+  background-color: #eee;
+  color: #222;
+  font-weight: bold;
+  border-radius: 4px;
 }
 
-/* Hide pages by default */
+nav button.active-tab {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Page Sections */
 .page {
   display: none;
   padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-/* Show the active page */
 .page.active {
   display: block;
+}
+
+/* Book Card Grid */
+#searchResults,
+#libraryList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+/* Book Card Styles */
+.book-card {
+  border: 1px solid #ccc;
+  margin: 10px;
+  padding: 10px;
+  width: 180px;
+  min-height: 300px;
+  text-align: center;
+  background-color: #fff;
+  display: inline-block;
+  vertical-align: top;
+}
+
+/* Book Image */
+.book-card img {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+  margin-bottom: 10px;
+  align-self: center;
+}
+
+/* Text Overflow */
+.book-card strong {
+  white-space: normal; /* allow wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Buttons Inside Cards */
+.book-card button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.book-card button:hover {
+  background-color: #45a049;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  nav button {
+    display: block;
+    width: 100%;
+    margin: 0.25rem 0;
+  }
+
+  .book-card {
+    min-height: 260px;
+  }
+
+  .book-card img {
+    width: 80px;
+    height: 120px;
+  }
 }
