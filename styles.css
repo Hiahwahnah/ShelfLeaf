@@ -67,6 +67,12 @@ nav button.active-tab {
   background-color: #fff;
   display: inline-block;
   vertical-align: top;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Book Image */
@@ -101,6 +107,28 @@ nav button.active-tab {
 .book-card button:hover {
   background-color: #45a049;
 }
+
+/* Dropdown Styles */
+  .statusSelect {
+    display: block;
+    margin: 10px auto 5px auto;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+  }
+
+  .statusSelect option[value="read"] {
+    background-color: #78ee7e; /* Light green for "Read" */
+  }
+
+  .statusSelect option[value="reading"] {
+    background-color: #fff9c4; /* Light yellow for "Reading" */
+  }
+
+  .statusSelect option[value="wantToRead"] {
+    background-color: #ffe0b2; /* Light orange for "Want to Read" */
+  }
 
 /* Responsive tweaks */
 @media (max-width: 600px) {

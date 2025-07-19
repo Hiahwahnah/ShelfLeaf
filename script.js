@@ -31,6 +31,8 @@ searchBtn.addEventListener('click', () => {
         searchResults.innerHTML = '<p>Please enter a search term.</p>';
         return;
     }
+
+    searchResults.innerHTML = '<p>Loading...</p>';
     
     fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`)
     .then(response => response.json())
@@ -41,6 +43,12 @@ searchBtn.addEventListener('click', () => {
         console.error('Error fetching data:', error);
         searchResults.innerHTML = '<p>Something went wrong. Try again later.</p>';
     });
+});
+
+searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        searchBtn.click();
+    }
 });
 
 function displayResults(books) {
@@ -111,28 +119,36 @@ function renderLibrary() {
             <img src="${book.cover}" alt="Book cover" />
             <strong>${book.title}</strong>
             <em>${book.author}</em>
-            <p>Status: ${book.status === 'read' ? 'Read' : 'Want to Read'}</p>
-            <button class="markBtn">${book.status === 'read' ? 'Mark as Want to Read' : 'Mark as Read'}</button>
+            <label> Status:
+                <select class="statusSelect">
+                    <option value="wantToRead" ${book.status === 'wantToRead' ? 'selected' : ''}>Want to Read</option>
+                    <option value="reading" ${book.status === 'reading' ? 'selected' : ''}>Reading</option>
+                    <option vale="read" ${book.status === 'read' ? 'selected' : ''}>Read</option>
+                </select>
+            </label>
             <button class="removeBtn">Remove</button>
         `;
 
-        const markBtn = card.querySelector('.markBtn');
+        const statusSelect = card.querySelector('.statusSelect');
         const removeBtn = card.querySelector('.removeBtn');
 
-        markBtn.addEventListener('click', () => toggleStatus(book.title, book.author));
+        statusSelect.addEventListener('change', () => {
+            updateStatus(book.title, book.author, e.target.value);
+        });
+
         removeBtn.addEventListener('click', () => removeBook(book.title, book.author));
 
         libraryList.appendChild(card);
     });
 }
 
-// ======= TOGGLE STATUS =======
-function toggleStatus(title, author) {
+// ======= UPDATE STATUS =======
+function updateStatus(title, author, newStatus) {
     const library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
 
     const updated = library.map(book => {
         if (book.title === title && book.author === author) {
-            book.status = book.status === 'read' ? 'wantToRead' : 'read';
+            book.status = newStatus;
         }
         return book;
     });
