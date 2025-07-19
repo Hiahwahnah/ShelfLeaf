@@ -1,15 +1,35 @@
-/* General Reset */
+/* ======= COLOR VARIABLES ======= */
+:root {
+  --background: #fff8f0;
+  --header-bg: #7f1d1d; /* deep red */
+  --header-text: #fff;
+  --nav-btn-bg: #fef3c7; /* light golden */
+  --nav-btn-text: #7f1d1d;
+  --nav-btn-active-bg: #f97316; /* autumn orange */
+  --card-bg: #fff;
+  --card-border: #e2e8f0;
+  --card-shadow: rgba(0, 0, 0, 0.2);
+  --button-bg: #ea580c; /* rich orange */
+  --button-hover: #c2410c;
+  --button-text: #fff;
+  --select-border: #d97706;
+  --status-read: #fecaca;     /* light red */
+  --status-reading: #fde68a;  /* soft yellow */
+  --status-want: #fcd34d;     /* brighter orange */
+}
+
+/* ======= GENERAL RESET ======= */
 body {
   font-family: sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f9f9f9;
+  background-color: var(--background);
 }
 
-/* Header & Navigation */
+/* ======= HEADER & NAVIGATION ======= */
 header {
-  background-color: #222;
-  color: white;
+  background-color: var(--header-bg);
+  color: var(--header-text);
   padding: 1rem;
   text-align: center;
 }
@@ -23,18 +43,19 @@ nav button {
   padding: 0.5rem 1rem;
   cursor: pointer;
   border: none;
-  background-color: #eee;
-  color: #222;
+  background-color: var(--nav-btn-bg);
+  color: var(--nav-btn-text);
   font-weight: bold;
   border-radius: 4px;
+  transition: background-color 0.2s ease;
 }
 
 nav button.active-tab {
-  background-color: #4CAF50;
-  color: white;
+  background-color: var(--nav-btn-active-bg);
+  color: var(--header-text);
 }
 
-/* Page Sections */
+/* ======= PAGE SECTIONS ======= */
 .page {
   display: none;
   padding: 1rem;
@@ -46,7 +67,7 @@ nav button.active-tab {
   display: block;
 }
 
-/* Book Card Grid */
+/* ======= BOOK CARD GRID ======= */
 #searchResults,
 #libraryList {
   display: grid;
@@ -56,15 +77,15 @@ nav button.active-tab {
   justify-content: center;
 }
 
-/* Book Card Styles */
+/* ======= BOOK CARD STYLES ======= */
 .book-card {
-  border: 1px solid #ccc;
+  border: 1px solid var(--card-border);
   margin: 10px;
   padding: 10px;
   width: 180px;
   min-height: 300px;
   text-align: center;
-  background-color: #fff;
+  background-color: var(--card-bg);
   display: inline-block;
   vertical-align: top;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -72,10 +93,10 @@ nav button.active-tab {
 
 .book-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px var(--card-shadow);
 }
 
-/* Book Image */
+/* ======= BOOK IMAGE ======= */
 .book-card img {
   width: 100px;
   height: 150px;
@@ -84,53 +105,54 @@ nav button.active-tab {
   align-self: center;
 }
 
-/* Text Overflow */
+/* ======= TEXT OVERFLOW ======= */
 .book-card strong {
-  white-space: normal; /* allow wrapping */
+  white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
   margin-bottom: 0.5rem;
 }
 
-/* Buttons Inside Cards */
+/* ======= BUTTONS INSIDE CARDS ======= */
 .book-card button {
   margin-top: 10px;
   padding: 5px 10px;
   border: none;
-  background-color: #4CAF50;
-  color: white;
+  background-color: var(--button-bg);
+  color: var(--button-text);
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .book-card button:hover {
-  background-color: #45a049;
+  background-color: var(--button-hover);
 }
 
-/* Dropdown Styles */
-  .statusSelect {
-    display: block;
-    margin: 10px auto 5px auto;
-    padding: 5px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-weight: bold;
-  }
+/* ======= DROPDOWN STYLES ======= */
+.statusSelect {
+  display: block;
+  margin: 10px auto 5px auto;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid var(--select-border);
+  font-weight: bold;
+}
 
-  .statusSelect option[value="read"] {
-    background-color: #78ee7e; /* Light green for "Read" */
-  }
+.statusSelect option[value="read"] {
+  background-color: var(--status-read);
+}
 
-  .statusSelect option[value="reading"] {
-    background-color: #fff9c4; /* Light yellow for "Reading" */
-  }
+.statusSelect option[value="reading"] {
+  background-color: var(--status-reading);
+}
 
-  .statusSelect option[value="wantToRead"] {
-    background-color: #ffe0b2; /* Light orange for "Want to Read" */
-  }
+.statusSelect option[value="wantToRead"] {
+  background-color: var(--status-want);
+}
 
-/* Responsive tweaks */
+/* ======= RESPONSIVE TWEAKS ======= */
 @media (max-width: 600px) {
   nav button {
     display: block;
