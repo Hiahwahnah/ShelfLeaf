@@ -23,6 +23,12 @@ libraryTab.addEventListener('click', () => {
 const searchBtn = document.getElementById('searchBtn');
 const searchInput = document.getElementById('searchInput');
 const searchResults = document.getElementById('searchResults');
+const searchForm = document.getElementById('searchForm');
+
+searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    searchBtn.click();
+});
 
 searchBtn.addEventListener('click', () => {
     const query = searchInput.value.trim();
@@ -45,12 +51,6 @@ searchBtn.addEventListener('click', () => {
     });
 });
 
-searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        searchBtn.click();
-    }
-});
-
 function displayResults(books) {
     searchResults.innerHTML = '';
 
@@ -60,11 +60,13 @@ function displayResults(books) {
     }
 
   books.slice(0, 12).forEach(book => {
+    const key = (book.key || book.cover_edition_key || `${book.title}-${book.author_name}`)
+        .replace(/[^\w\-]/g, '');
     const title = book.title;
     const author = book.author_name ? book.author_name.join(', ') : 'Unknown';
     const cover = book.cover_i
     ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
-    : 'https://via.placeholder.com/100x150?text=No+Cover';
+    : 'https://placehold.co/100x150?text=No+Cover';
     
     const card = document.createElement('div');
     card.classList.add('book-card');
@@ -77,7 +79,7 @@ function displayResults(books) {
 
     const addBtn = card.querySelector('button');
     addBtn.addEventListener('click', () => {
-        addToLibrary({ title, author, cover, status: 'wantToRead' });
+        addToLibrary({ key, title, author, cover, status: 'wantToRead' });
     });
     
     searchResults.appendChild(card);
@@ -88,8 +90,8 @@ function displayResults(books) {
 function addToLibrary(book) {
     const library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
 
-    // Check for duplicates
-    const exists = library.some(b => b.title === book.title && b.author === book.author);
+    // Check for duplicates by key
+    const exists = library.some(b => b.key === book.key);
     if (exists) {
         alert('This book is already in your library.');
         return;
@@ -114,41 +116,44 @@ function renderLibrary() {
 
     library.forEach(book => {
         const card = document.createElement('div');
+        const statusId = `status-${book.key.replace(/[\/\s]/g, '-')}`;
         card.classList.add('book-card');
         card.innerHTML = `
             <img src="${book.cover}" alt="Book cover" />
             <strong>${book.title}</strong>
             <em>${book.author}</em>
-            <label> Status:
-                <select class="statusSelect">
-                    <option value="wantToRead" ${book.status === 'wantToRead' ? 'selected' : ''}>Want to Read</option>
-                    <option value="reading" ${book.status === 'reading' ? 'selected' : ''}>Reading</option>
-                    <option vale="read" ${book.status === 'read' ? 'selected' : ''}>Read</option>
-                </select>
-            </label>
+            <label for="${statusId}">Status:</label>
+            <select
+                id="${statusId}"
+                name="bookStatus"
+                class="statusSelect">
+                <option value="wantToRead" ${book.status === 'wantToRead' ? 'selected' : ''}>Want to Read</option>
+                <option value="reading" ${book.status === 'reading' ? 'selected' : ''}>Reading</option>
+                <option value="read" ${book.status === 'read' ? 'selected' : ''}>Read</option>
+            </select>
             <button class="removeBtn">Remove</button>
         `;
 
         const statusSelect = card.querySelector('.statusSelect');
         const removeBtn = card.querySelector('.removeBtn');
 
-        statusSelect.addEventListener('change', () => {
-            updateStatus(book.title, book.author, e.target.value);
+        statusSelect.addEventListener('change', (e) => {
+            updateStatus(book.key, e.target.value);
         });
 
-        removeBtn.addEventListener('click', () => removeBook(book.title, book.author));
+        removeBtn.addEventListener('click', () => removeBook(book.key));
 
         libraryList.appendChild(card);
     });
 }
 
 // ======= UPDATE STATUS =======
-function updateStatus(title, author, newStatus) {
+function updateStatus(key, newStatus) {
     const library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
 
     const updated = library.map(book => {
-        if (book.title === title && book.author === author) {
-            book.status = newStatus;
+        if (book.key === key) {
+            return { ...book, status: newStatus };
         }
         return book;
     });
@@ -158,10 +163,10 @@ function updateStatus(title, author, newStatus) {
 }
 
 // ======= REMOVE BOOK =======
-function removeBook(title, author) {
+function removeBook(key) {
     const library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
 
-    const filtered = library.filter(book => !(book.title === title && book.author === author));
+    const filtered = library.filter(book => book.key !== key);
     localStorage.setItem('shelfLeafLibrary', JSON.stringify(filtered));
     renderLibrary();
 }
