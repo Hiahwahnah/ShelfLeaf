@@ -1,73 +1,80 @@
 # ShelfLeaf  
-Lightweight reading tracker for book lovers.
+A lightweight, no-login book tracker built for readers who want simple control over their personal library.
 
 ## Overview  
-ShelfLeaf is a responsive web application that helps users search for books using the Open Library API and manage a personal library. Users can save books to their "My Library" list and assign them a reading status: *Want to Read*, *Reading*, or *Read*. It’s designed to be simple, accessible, and functional across desktop and mobile devices.
+ShelfLeaf is a clean, responsive web app that lets you search for books using the Open Library API and build your own personal library right in your browser. You can track what you're reading, mark what you’ve finished, and save books you want to check out later — all without creating an account.
 
-This project was built as a capstone for the Code:You Web Development program. It demonstrates core skills in HTML, CSS, JavaScript, and API integration.
+This project was created as a capstone for the Code:You Web Development program to demonstrate skills in HTML, CSS, JavaScript, API integration, and responsive design.
 
 ---
 
 ## Features
 
-✅ **Open Library API Integration**  
-Users can search real book data by title or keyword and view covers, authors, and results directly from the Open Library database.
+- Book Search with Open Library API  
+  Look up real books by title or keyword — complete with cover art and author info pulled directly from the Open Library database.
 
-✅ **Persistent Personal Library**  
-Books can be added to a personal library stored in the browser via `localStorage`, with reading status saved across sessions.
+- Your Personal Library (Saved Locally)  
+  Add books to your own library stored in your browser with `localStorage`. Everything stays saved between visits.
 
-✅ **Status Management Dropdown**  
-Users can select a reading status for each saved book using a color-coded dropdown (Want to Read, Reading, Read), which updates in real time.
+- Status Tracking with Color-Coded Dropdown  
+  Mark each book as Want to Read, Reading, or Read — and switch statuses whenever you like.
 
-✅ **Responsive Design**  
-The app adjusts layout and design for mobile and desktop using Flexbox, Grid, and media queries.
+- More Info Pop-up  
+  Click “More Info” to view a detailed description, subjects, and a link to the full Open Library page.
 
-✅ **Duplicate Prevention**  
-Each book is uniquely tracked using its Open Library key, preventing accidental duplicates even for books with the same title/author.
+- Duplicate Prevention  
+  Each saved book uses a unique key, so you won’t accidentally save the same title twice.
+
+- Responsive Design  
+  ShelfLeaf looks and works great on phones, tablets, and desktops thanks to mobile-first CSS with Flexbox, Grid, and media queries.
+
+- Helpful Error Messages  
+  Friendly guidance when searches return nothing, or something goes wrong.
 
 ---
 
 ## How to Run This Project
 
-1. Clone or download this repository to your machine.
-2. Open the `index.html` file in any modern browser (Chrome, Firefox, Edge, etc.).
-3. No installation or server setup is required.
+1. Clone or download this repository to your computer.
+2. Open `index.html` in any modern browser (Chrome, Firefox, Safari, Edge).
+3. That’s it. No setup or installation needed.
 
 ---
 
-## Technologies Used
+## Built With
 
-- HTML5
-- CSS3 (Flexbox + Grid)
-- JavaScript (ES6)
-- Open Library API
-- `localStorage` for persistence
+- HTML5  
+- CSS3 (Flexbox + Grid)  
+- JavaScript (ES6)  
+- Open Library API  
+- `localStorage` for browser-based persistence
 
 ---
 
 ## Capstone Requirements Met
 
-- ✅ **Integrate an API (not weather):** Used Open Library API to search for and display book data.
-- ✅ **Responsive Design:** Used Flexbox, Grid, and media queries for mobile and desktop layouts.
-- ✅ **Persist data to internal API (`localStorage`):** User library and book status saved in localStorage.
-- ✅ **Analyze and display data from arrays/objects:** Rendered books and their status from localStorage arrays.
-- ✅ **Use a dynamic UI feature:** Status dropdown for each saved book updates its state in real time.
-- ✅ **Prevent duplicates using a unique key:** Used Open Library’s `book.key` to avoid saving duplicates.
-- ✅ **10+ Git commits using terminal:** Project changes tracked and pushed via terminal with descriptive messages.
-- ✅ **README with description and features:** Includes project overview, features used, and how to run the app.
+- API Integration (Open Library)
+- Responsive design using Flexbox, Grid, and media queries
+- Data persistence using `localStorage`
+- Dynamic UI updates using arrays/objects
+- Duplicate prevention with unique keys
+- Real-time dropdown status updates
+- 10 or more Git commits using terminal
+- Complete README with description, features, and instructions
 
 ---
 
-## Future Plans
+## Future Features
 
-- Add sorting/filtering for books by status or title
-- Add genre tags and cover previews
-- Enable exporting/importing the user's library
-- Polish the visual design with theming and icons
+- Sort and filter your library by title or reading status  
+- Drag-and-drop reordering of saved books  
+- Genre/tag support  
+- Export/import personal library to file  
+- Light/dark theme switch
 
 ---
 
 ## Author
 
 H. Richard Neal III  
-*Code:You January 2025 Cohort*
+Code:You January 2025 Cohort

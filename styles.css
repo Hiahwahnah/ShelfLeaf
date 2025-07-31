@@ -1,29 +1,34 @@
 /* ======= COLOR VARIABLES ======= */
 :root {
   --background: #fff8f0;
-  --header-bg: #7f1d1d; /* deep red */
+  --header-bg: #7f1d1d;
   --header-text: #fff;
-  --nav-btn-bg: #fef3c7; /* light golden */
+  --nav-btn-bg: #fef3c7;
   --nav-btn-text: #7f1d1d;
-  --nav-btn-active-bg: #f97316; /* autumn orange */
+  --nav-btn-active-bg: #f97316;
   --card-bg: #fff;
   --card-border: #e2e8f0;
   --card-shadow: rgba(0, 0, 0, 0.2);
-  --button-bg: #ea580c; /* rich orange */
+  --button-bg: #ea580c;
   --button-hover: #c2410c;
   --button-text: #fff;
   --select-border: #d97706;
-  --status-read: #fecaca;     /* light red */
-  --status-reading: #fde68a;  /* soft yellow */
-  --status-want: #fcd34d;     /* brighter orange */
+  --status-read: #fecaca;
+  --status-reading: #fde68a;
+  --status-want: #fcd34d;
 }
 
 /* ======= GENERAL RESET ======= */
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: sans-serif;
   margin: 0;
   padding: 0;
   background-color: var(--background);
+  transition: filter 0.3s ease;
 }
 
 /* ======= HEADER & NAVIGATION ======= */
@@ -96,7 +101,6 @@ nav button.active-tab {
   box-shadow: 0 4px 8px var(--card-shadow);
 }
 
-/* ======= BOOK IMAGE ======= */
 .book-card img {
   width: 100px;
   height: 150px;
@@ -105,7 +109,6 @@ nav button.active-tab {
   align-self: center;
 }
 
-/* ======= TEXT OVERFLOW ======= */
 .book-card strong {
   white-space: normal;
   overflow: hidden;
@@ -114,10 +117,10 @@ nav button.active-tab {
   margin-bottom: 0.5rem;
 }
 
-/* ======= BUTTONS INSIDE CARDS ======= */
 .book-card button {
-  margin-top: 10px;
-  padding: 5px 10px;
+  display: block;
+  margin: 0.25rem auto;
+  padding: 6px 12px;
   border: none;
   background-color: var(--button-bg);
   color: var(--button-text);
@@ -152,20 +155,110 @@ nav button.active-tab {
   background-color: var(--status-want);
 }
 
-/* ======= RESPONSIVE TWEAKS ======= */
+/* ======= RESPONSIVE DESIGN: MOBILE (<=600px) ======= */
 @media (max-width: 600px) {
+  :root {
+    --background: #1f1f1f;
+    --header-bg: #4b1d1d;
+    --header-text: #fef3c7;
+    --nav-btn-bg: #2f2f2f;
+    --nav-btn-text: #fcd34d;
+    --nav-btn-active-bg: #fb923c;
+    --card-bg: #2c2c2c;
+    --card-border: #444;
+    --card-shadow: rgba(0, 0, 0, 0.5);
+    --button-bg: #c2410c;
+    --button-hover: #9a3412;
+    --button-text: #fff7ed;
+    --select-border: #78350f;
+    --status-read: #7f1d1d;
+    --status-reading: #b45309;
+    --status-want: #92400e;
+  }
+
   nav button {
     display: block;
     width: 100%;
     margin: 0.25rem 0;
   }
 
+  #searchResults,
+  #libraryList {
+    grid-template-columns: 1fr;
+  }
+
   .book-card {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
     min-height: 260px;
+    text-align: left;
+    padding: 1rem;
   }
 
   .book-card img {
-    width: 80px;
-    height: 120px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 0.5rem;
   }
+}
+
+/* ======= POPUP STYLES ======= */
+.popUp {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popUp-content {
+  background: var(--card-bg);
+  color: var(--nav-btn-text);
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-y: auto;
+  max-height: 80vh;
+  position: relative;
+}
+
+#closePopUp {
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  color: var(--nav-btn-text);
+}
+
+.hidden {
+  display: none;
+}
+
+.popUp a {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--button-bg);
+  text-decoration: underline;
+}
+
+.popUp a:hover {
+  color: var(--button-hover);
+}
+
+body.popUp-open main,
+body.popUp-open header {
+  filter: blur(3px);
+  pointer-events: none;
 }
