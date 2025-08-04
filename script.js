@@ -106,7 +106,19 @@ function addToLibrary(book) {
 
 // ======= RENDER LIBRARY =======
 function renderLibrary() {
-  const library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
+  let library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
+
+  const sortMethod = sortSelect?.value || 'default';
+
+  if (sortMethod === 'titleAZ') {
+    library.sort((a, b) => a.title.localeCompare(b.title));
+  } else if (sortMethod === 'titleZA') {
+    library.sort((a, b) => b.title.localeCompare(a.title));
+  }else if (sortMethod === 'status') {
+    const order = { wantToRead: 0, reading: 1, read: 2 };
+    library.sort((a, b) => order[a.status] - order[b.status]);
+  }
+
   const libraryList = document.getElementById('libraryList');
   libraryList.innerHTML = '';
 
@@ -148,6 +160,9 @@ function renderLibrary() {
     libraryList.appendChild(card);
   });
 }
+
+const sortSelect = document.getElementById('sortSelect');
+sortSelect.addEventListener('change', renderLibrary);
 
 // ======= UPDATE STATUS =======
 function updateStatus(key, newStatus) {
