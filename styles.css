@@ -28,6 +28,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: var(--background);
+  color: #111;
   transition: filter 0.3s ease;
 }
 
@@ -94,6 +95,7 @@ nav button.active-tab {
   display: inline-block;
   vertical-align: top;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: inherit;
 }
 
 .book-card:hover {
@@ -158,28 +160,44 @@ nav button.active-tab {
 /* ======= RESPONSIVE DESIGN: MOBILE (<=600px) ======= */
 @media (max-width: 600px) {
   :root {
-    --background: #1f1f1f;
-    --header-bg: #4b1d1d;
-    --header-text: #fef3c7;
-    --nav-btn-bg: #2f2f2f;
+    --background: #2a2a2a;
+    --header-bg: #5a1a1a;
+    --header-text: #fffde7;
+    --nav-btn-bg: #3a3a3a;
     --nav-btn-text: #fcd34d;
-    --nav-btn-active-bg: #fb923c;
-    --card-bg: #2c2c2c;
-    --card-border: #444;
-    --card-shadow: rgba(0, 0, 0, 0.5);
-    --button-bg: #c2410c;
-    --button-hover: #9a3412;
-    --button-text: #fff7ed;
-    --select-border: #78350f;
-    --status-read: #7f1d1d;
-    --status-reading: #b45309;
-    --status-want: #92400e;
+    --nav-btn-active-bg: #f97316;
+    --card-bg: #333;
+    --card-border: #555;
+    --card-shadow: rgba(0, 0, 0, 0.6);
+    --button-bg: #fb923c;
+    --button-hover: #f97316;
+    --button-text: #fff;
+    --select-border: #d97706;
+    --status-read: #f87171;
+    --status-reading: #facc15;
+    --status-want: #fb923c;
+  }
+
+  body {
+    color: #fefefe;
   }
 
   nav button {
     display: block;
     width: 100%;
     margin: 0.25rem 0;
+  }
+
+  #searchForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  #searchForm input,
+  #searchForm button {
+    width: 100%;
+    box-sizing: border-box;
   }
 
   #searchResults,
@@ -200,6 +218,18 @@ nav button.active-tab {
     width: 100%;
     height: auto;
     margin-bottom: 0.5rem;
+  }
+
+  input,
+  select,
+  button {
+    color: #fff;
+    background-color: #444;
+    border: 1px solid #666;
+  }
+
+  input::placeholder {
+    color: #ccc;
   }
 }
 
