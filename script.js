@@ -70,7 +70,7 @@ function displayResults(books) {
     const card = document.createElement('div');
     card.classList.add('book-card');
     card.innerHTML = `
-      <img src="${cover}" alt="Book cover" />
+      <img src="${cover}" alt="Cover of ${book.title} by ${book.author}" />
       <strong>${title}</strong>
       <em>${author}</em>
       <button class="addBtn">Add to Library</button>
@@ -127,12 +127,14 @@ function renderLibrary() {
     return;
   }
 
-  library.forEach(book => {
+  library.forEach((book, index) => {
     const card = document.createElement('div');
     const statusId = `status-${book.key.replace(/[\/\s]/g, '-')}`;
     card.classList.add('book-card');
+    card.setAttribute('draggable', 'true');
+    card.setAttribute('data-index', index);
     card.innerHTML = `
-      <img src="${book.cover}" alt="Book cover" />
+      <img src="${book.cover}" alt="Cover of ${book.title} by ${book.author}" />
       <strong>${book.title}</strong>
       <em>${book.author}</em>
       <label for="${statusId}">Status:</label>
@@ -144,6 +146,36 @@ function renderLibrary() {
       <button class="infoBtn">More Info</button>
       <button class="removeBtn">Remove</button>
     `;
+
+    card.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', card.getAttribute('data-index'));
+      e.currentTarget.classList.add('dragging');
+    });
+
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+    });
+
+    card.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      card.classList.add('drag-over');
+    });
+
+    card.addEventListener('dragleave', () => {
+      card.classList.remove('drag-over');
+    });
+
+    card.addEventListener('drop', (e) => {
+      e.preventDefault();
+      card.classList.remove('drag-over');
+
+      const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+      const toIndex = parseInt(card.getAttribute('data-index'));
+
+      if (fromIndex === toIndex) return;
+
+      reorderLibrary(fromIndex, toIndex);
+    });
 
     card.querySelector('.infoBtn').addEventListener('click', () => {
       getBookDetails(book.key, book.title);
@@ -159,6 +191,16 @@ function renderLibrary() {
 
     libraryList.appendChild(card);
   });
+}
+
+function reorderLibrary(fromIndex, toIndex) {
+  let library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
+
+  const movedBook = library.splice(fromIndex, 1)[0];
+  library.splice(toIndex, 0, movedBook);
+
+  localStorage.setItem('shelfLeafLibrary', JSON.stringify(library));
+  renderLibrary();
 }
 
 const sortSelect = document.getElementById('sortSelect');

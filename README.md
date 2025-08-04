@@ -4,31 +4,39 @@ A lightweight, no-login book tracker built for readers who want simple control o
 ## Overview  
 ShelfLeaf is a clean, responsive web app that lets you search for books using the Open Library API and build your own personal library right in your browser. You can track what you're reading, mark what you’ve finished, and save books you want to check out later — all without creating an account.
 
+You can reorder your saved books via drag-and-drop and sort them by title or status — all in a fully responsive, no-login experience.
+
 This project was created as a capstone for the Code:You Web Development program to demonstrate skills in HTML, CSS, JavaScript, API integration, and responsive design.
 
 ---
 
 ## Features
 
-- Book Search with Open Library API  
+- **Book Search with Open Library API**  
   Look up real books by title or keyword — complete with cover art and author info pulled directly from the Open Library database.
 
-- Your Personal Library (Saved Locally)  
+- **Your Personal Library (Saved Locally)**  
   Add books to your own library stored in your browser with `localStorage`. Everything stays saved between visits.
 
-- Status Tracking with Color-Coded Dropdown  
+- **Status Tracking with Color-Coded Dropdown**  
   Mark each book as Want to Read, Reading, or Read — and switch statuses whenever you like.
 
-- More Info Pop-up  
+- **Sort Your Library**  
+  Use a dropdown to sort books by title (A–Z or Z–A) or by reading status for better organization.
+
+- **Drag-and-Drop Reordering**  
+  Reorder books in your library manually with a simple drag-and-drop interface. The new order is saved automatically.
+
+- **More Info Pop-up**  
   Click “More Info” to view a detailed description, subjects, and a link to the full Open Library page.
 
-- Duplicate Prevention  
+- **Duplicate Prevention**  
   Each saved book uses a unique key, so you won’t accidentally save the same title twice.
 
-- Responsive Design  
+- **Responsive Design**  
   ShelfLeaf looks and works great on phones, tablets, and desktops thanks to mobile-first CSS with Flexbox, Grid, and media queries.
 
-- Helpful Error Messages  
+- **Helpful Error Messages**  
   Friendly guidance when searches return nothing, or something goes wrong.
 
 ---
@@ -53,22 +61,19 @@ This project was created as a capstone for the Code:You Web Development program 
 
 ## Capstone Requirements Met
 
-- API Integration (Open Library)
-- Responsive design using Flexbox, Grid, and media queries
-- Data persistence using `localStorage`
-- Dynamic UI updates using arrays/objects
-- Duplicate prevention with unique keys
-- Real-time dropdown status updates
-- 10 or more Git commits using terminal
-- Complete README with description, features, and instructions
-
+- Integrated a third-party API (Open Library)
+- Responsive design with media queries, Flexbox, and Grid for mobile/desktop support
+- Persistent data using `localStorage` for saved book library
+- Real-time UI updates with array/object manipulation
+- Duplicate prevention using unique keys
+- Visually appealing, accessible, and user-friendly interface
+- 10+ distinct Git commits made using terminal commands
+- README includes a project overview, feature list, instructions, and future improvements
 ---
 
 ## Future Features
 
-- Sort and filter your library by title or reading status  
-- Drag-and-drop reordering of saved books  
-- Genre/tag support  
+- Genre/tag support based on book subjects  
 - Export/import personal library to file  
 - Light/dark theme switch
 
