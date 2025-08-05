@@ -18,11 +18,11 @@
         <main>
             <!-- Search Page -->
             <section id="searchPage" class="page active">
-                <form id="searchForm" role="search" autocomplete="on">
-                    <label for="searchInput">Search for books:</label>
+                <form id="searchForm" role="search" autocomplete="off">
+                    <label for="searchField">Search for books:</label>
                     <input
                         type="text"
-                        id="searchInput"
+                        id="searchField"
                         name="bookSearch"
                         placeholder="Search for books..."
                         autocomplete="on"
@@ -38,10 +38,12 @@
                 <label for="sortSelect">Sort by:</label>
                 <select id="sortSelect">
                     <option value="default">Default</option>
+                    <option value="custom">Custom (Manual Order)</option>
                     <option value="titleAZ">Title (A-Z)</option>
                     <option value="titleZA">Title (Z-A)</option>
                     <option value="status">Status</option>
                 </select>
+                <p id="sortNotice">Use the dropdown to sort your library.</p>
                 <div id="libraryList"></div>
             </section>
         </main>
@@ -59,7 +61,9 @@
                 <div id="popUpBody"></div>
             </div>
         </div>
-
+        
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
         <script src="script.js"></script>
     </body>
 </html>

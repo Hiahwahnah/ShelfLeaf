@@ -1,4 +1,4 @@
-// ======= TAB SWITCHING =======
+// ======= TABS (Search/Library) =======
 const searchTab = document.getElementById('searchTab');
 const libraryTab = document.getElementById('libraryTab');
 const searchPage = document.getElementById('searchPage');
@@ -19,9 +19,11 @@ libraryTab.addEventListener('click', () => {
   renderLibrary();
 });
 
-// ======= SEARCH & DISPLAY BOOKS =======
+// ======= SEARCH FUNCTIONALITY =======
+// - Handles search form submit and API fetch
+// - Builds book cards with add/info buttons
 const searchBtn = document.getElementById('searchBtn');
-const searchInput = document.getElementById('searchInput');
+const searchInput = document.getElementById('searchField');
 const searchResults = document.getElementById('searchResults');
 const searchForm = document.getElementById('searchForm');
 
@@ -42,9 +44,7 @@ searchBtn.addEventListener('click', () => {
 
   fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`)
     .then(response => response.json())
-    .then(data => {
-      displayResults(data.docs);
-    })
+    .then(data => displayResults(data.docs))
     .catch(error => {
       console.error('Error fetching data:', error);
       searchResults.innerHTML = '<p>I think something is wrong. Would you mind coming back again later?</p>';
@@ -90,9 +90,9 @@ function displayResults(books) {
 }
 
 // ======= ADD TO LIBRARY =======
+// - Adds book to shelfLeafLibrary (default order)
 function addToLibrary(book) {
   const library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
-
   const exists = library.some(b => b.key === book.key);
   if (exists) {
     alert('You already have this one.');
@@ -105,18 +105,35 @@ function addToLibrary(book) {
 }
 
 // ======= RENDER LIBRARY =======
+// - Uses sortMode: default, custom, titleAZ, etc.
+// - Renders draggable cards
+// - Handles drop and triggers reorderLibrary()
+let sortableInstance = null;
+
 function renderLibrary() {
-  let library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
+  const sortMode = localStorage.getItem('sortMode') || 'default';
+  const defaultLibrary = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
+  const customOrder = JSON.parse(localStorage.getItem('customOrder')) || [];
 
-  const sortMethod = sortSelect?.value || 'default';
+  if (sortMode === 'custom') {
+  document.getElementById('sortNotice').textContent = 'Drag-and-drop sorting enabled. Rearrange your books as you like!';
+} else {
+  document.getElementById('sortNotice').textContent = 'Use the dropdown to sort your library.';
+}
 
-  if (sortMethod === 'titleAZ') {
-    library.sort((a, b) => a.title.localeCompare(b.title));
-  } else if (sortMethod === 'titleZA') {
-    library.sort((a, b) => b.title.localeCompare(a.title));
-  }else if (sortMethod === 'status') {
+  let library;
+
+  if (sortMode === 'custom') {
+    library = customOrder;
+  } else if (sortMode === 'titleAZ') {
+    library =[...defaultLibrary].sort((a, b) => a.title.localeCompare(b.title));
+  } else if (sortMode === 'titleZA') {
+    library = [...defaultLibrary].sort((a, b) => b.title.localeCompare(a.title));
+  } else if (sortMode === 'status') {
     const order = { wantToRead: 0, reading: 1, read: 2 };
-    library.sort((a, b) => order[a.status] - order[b.status]);
+    library = [...defaultLibrary].sort((a, b) => order[a.status] - order[b.status]);
+  } else {
+    library = defaultLibrary;
   }
 
   const libraryList = document.getElementById('libraryList');
@@ -129,7 +146,8 @@ function renderLibrary() {
 
   library.forEach((book, index) => {
     const card = document.createElement('div');
-    const statusId = `status-${book.key.replace(/[\/\s]/g, '-')}`;
+    const safeKey = book.key.replace(/[^\w-]/g, '-');
+    const statusId = `status-${safeKey}-${index}`;
     card.classList.add('book-card');
     card.setAttribute('draggable', 'true');
     card.setAttribute('data-index', index);
@@ -147,36 +165,6 @@ function renderLibrary() {
       <button class="removeBtn">Remove</button>
     `;
 
-    card.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData('text/plain', card.getAttribute('data-index'));
-      e.currentTarget.classList.add('dragging');
-    });
-
-    card.addEventListener('dragend', () => {
-      card.classList.remove('dragging');
-    });
-
-    card.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      card.classList.add('drag-over');
-    });
-
-    card.addEventListener('dragleave', () => {
-      card.classList.remove('drag-over');
-    });
-
-    card.addEventListener('drop', (e) => {
-      e.preventDefault();
-      card.classList.remove('drag-over');
-
-      const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
-      const toIndex = parseInt(card.getAttribute('data-index'));
-
-      if (fromIndex === toIndex) return;
-
-      reorderLibrary(fromIndex, toIndex);
-    });
-
     card.querySelector('.infoBtn').addEventListener('click', () => {
       getBookDetails(book.key, book.title);
     });
@@ -191,22 +179,66 @@ function renderLibrary() {
 
     libraryList.appendChild(card);
   });
+
+  if (sortableInstance) {
+    sortableInstance.destroy();
+  }
+
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  
+  sortableInstance = new Sortable(libraryList, {
+    animation: 150,
+    ghostClass: 'dragging',
+    ...(isTouchDevice && {
+    delay: 200,
+    touchStartThreshold: 5,
+  }),
+    onEnd: (evt) => {
+      const fromIndex = evt.oldIndex;
+      const toIndex = evt.newIndex;
+      if (fromIndex !== toIndex) {
+        reorderLibrary(fromIndex, toIndex);
+      }
+    }
+  });
 }
 
+// ======= REORDER LIBRARY (Drag-and-Drop Logic)=======
 function reorderLibrary(fromIndex, toIndex) {
-  let library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
+  let currentCustomOrder = JSON.parse(localStorage.getItem('customOrder'));
 
-  const movedBook = library.splice(fromIndex, 1)[0];
-  library.splice(toIndex, 0, movedBook);
+  if (!currentCustomOrder || currentCustomOrder.length === 0) {
+    currentCustomOrder = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
+  }
 
-  localStorage.setItem('shelfLeafLibrary', JSON.stringify(library));
-  renderLibrary();
+  const movedBook = currentCustomOrder.splice(fromIndex, 1)[0];
+  currentCustomOrder.splice(toIndex, 0, movedBook);
+
+  const uniqueOrder = currentCustomOrder.filter(
+    (book, index, self) => index === self.findIndex(b => b.key === book.key)
+  );
+
+  localStorage.setItem('customOrder', JSON.stringify(uniqueOrder));
+  localStorage.setItem('sortMode', 'custom');
+
+  const sortDropdown = document.getElementById('sortSelect');
+  sortDropdown.value = 'custom';
+  sortDropdown.dispatchEvent(new Event('change'));
 }
 
+// ======= SORT SELECT EVENT LISTENER =======
 const sortSelect = document.getElementById('sortSelect');
-sortSelect.addEventListener('change', renderLibrary);
 
-// ======= UPDATE STATUS =======
+sortSelect.addEventListener('change', () => {
+  const selectedSort = sortSelect.value;
+  localStorage.setItem('sortMode', selectedSort);
+  renderLibrary();
+});
+
+
+// ======= STATUS & REMOVE =======
+// - updateStatus()
+// - removeBook()
 function updateStatus(key, newStatus) {
   const library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
   const updated = library.map(book =>
@@ -216,7 +248,6 @@ function updateStatus(key, newStatus) {
   renderLibrary();
 }
 
-// ======= REMOVE BOOK =======
 function removeBook(key) {
   const library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
   const filtered = library.filter(book => book.key !== key);
@@ -224,7 +255,10 @@ function removeBook(key) {
   renderLibrary();
 }
 
-// ======= GET BOOK DETAILS =======
+// ======= POPUP BOOK DETAILS =======
+// - getBookDetails()
+// - showBookPopUp()
+// - ESC key closes popup
 function getBookDetails(bookKey, bookTitle = '') {
   fetch(`https://openlibrary.org${bookKey}.json`)
     .then(response => response.json())
@@ -238,7 +272,6 @@ function getBookDetails(bookKey, bookTitle = '') {
     });
 }
 
-// ======= SHOW POPUP =======
 function showBookPopUp(data, workKey, title = '') {
   const popUp = document.getElementById('bookPopUp');
   const popUpBody = document.getElementById('popUpBody');
@@ -282,7 +315,15 @@ function showBookPopUp(data, workKey, title = '') {
   };
 }
 
-// ======= SLUGIFY TITLE =======
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.getElementById('bookPopUp').classList.add('hidden');
+    document.body.classList.remove('popUp-open');
+  }
+});
+
+// ======= UTILS =======
+// - slugifyTitle()
 function slugifyTitle(title) {
   return title
     .toLowerCase()
@@ -291,11 +332,3 @@ function slugifyTitle(title) {
     .replace(/_{2,}/g, '_')
     .trim();
 }
-
-// ======= ESCAPE KEY CLOSE =======
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    document.getElementById('bookPopUp').classList.add('hidden');
-    document.body.classList.remove('popUp-open');
-  }
-});
