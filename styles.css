@@ -1,5 +1,6 @@
 /* ========== GLOBAL VARIABLES ========== */
 :root {
+  --text-color: #111;
   --background: #f9f9f9;
   --header-bg: #005f73;
   --header-text: #ffffff;
@@ -28,7 +29,7 @@ body {
   padding: 0;
   font-family: sans-serif;
   background-color: var(--background);
-  color: #fefefe;
+  color: var(--text-color);
   transition: filter 0.3s ease;
 }
 
@@ -247,9 +248,10 @@ button:focus {
   display: none;
 }
 
-/* ========== RESPONSIVE (LIGHTER TOUCH) ========== */
+/* ========== RESPONSIVE ========== */
 @media (max-width: 600px) {
   :root {
+    --text-color: #fefefe;
     --background: #121212;
     --header-bg: #1f2937;
     --header-text: #fefefe;

@@ -111,22 +111,34 @@ function addToLibrary(book) {
 let sortableInstance = null;
 
 function renderLibrary() {
-  const sortMode = localStorage.getItem('sortMode') || 'default';
+  let sortMode = localStorage.getItem('sortMode') || 'default';
   const defaultLibrary = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
-  const customOrder = JSON.parse(localStorage.getItem('customOrder')) || [];
+  let customOrder = JSON.parse(localStorage.getItem('customOrder')) || [];
 
   if (sortMode === 'custom') {
-  document.getElementById('sortNotice').textContent = 'Drag-and-drop sorting enabled. Rearrange your books as you like!';
-} else {
-  document.getElementById('sortNotice').textContent = 'Use the dropdown to sort your library.';
-}
+    if (customOrder.length === 0) {
+      sortMode = 'default';
+      localStorage.setItem('sortMode', 'default');
+    } else {
+      customOrder = customOrder.filter(book =>
+        defaultLibrary.some(libBook => libBook.key === book.key)
+      );
+      localStorage.setItem('customOrder', JSON.stringify(customOrder));
+    }
+  }
+  
+  const sortNotice = document.getElementById('sortNotice');
+  sortNotice.textContent =
+  sortMode === 'custom'
+      ? 'Drag-and-drop sorting enabled. Rearrange your books as you like!'
+      : 'Use the dropdown to sort your library.';
 
   let library;
 
   if (sortMode === 'custom') {
     library = customOrder;
   } else if (sortMode === 'titleAZ') {
-    library =[...defaultLibrary].sort((a, b) => a.title.localeCompare(b.title));
+    library = [...defaultLibrary].sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortMode === 'titleZA') {
     library = [...defaultLibrary].sort((a, b) => b.title.localeCompare(a.title));
   } else if (sortMode === 'status') {
@@ -185,14 +197,14 @@ function renderLibrary() {
   }
 
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  
+
   sortableInstance = new Sortable(libraryList, {
     animation: 150,
     ghostClass: 'dragging',
     ...(isTouchDevice && {
-    delay: 200,
-    touchStartThreshold: 5,
-  }),
+      delay: 200,
+      touchStartThreshold: 5,
+    }),
     onEnd: (evt) => {
       const fromIndex = evt.oldIndex;
       const toIndex = evt.newIndex;
@@ -202,7 +214,6 @@ function renderLibrary() {
     }
   });
 }
-
 // ======= REORDER LIBRARY (Drag-and-Drop Logic)=======
 function reorderLibrary(fromIndex, toIndex) {
   let currentCustomOrder = JSON.parse(localStorage.getItem('customOrder'));
