@@ -1,6 +1,9 @@
 # ShelfLeaf  
 A lightweight, no-login book tracker built for readers who want simple control over their personal library.
 
+### Live Demo  
+Check out the live version here: [https://shelf-leaf.vercel.app](https://shelf-leaf.vercel.app)
+
 ## Overview  
 ShelfLeaf is a clean, responsive web app that lets you search for books using the Open Library API and build your own personal library right in your browser. You can track what you're reading, mark what you’ve finished, and save books you want to check out later — all without creating an account.
 
@@ -42,6 +45,17 @@ This project was created as a capstone for the Code:You Web Development program 
 ---
 
 ## How to Run This Project
+
+
+### Option 1: Use the Live Demo  
+Visit the hosted version here:  
+[https://shelf-leaf.vercel.app](https://shelf-leaf.vercel.app)
+
+No setup required — just open the link in your browser and start searching, saving, and organizing books.
+
+---
+
+### Option 2: Run Locally
 
 1. Clone or download this repository to your computer.
 2. Open `index.html` in any modern browser (Chrome, Firefox, Safari, Edge).

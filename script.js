@@ -126,10 +126,10 @@ function renderLibrary() {
       localStorage.setItem('customOrder', JSON.stringify(customOrder));
     }
   }
-  
+
   const sortNotice = document.getElementById('sortNotice');
   sortNotice.textContent =
-  sortMode === 'custom'
+    sortMode === 'custom'
       ? 'Drag-and-drop sorting enabled. Rearrange your books as you like!'
       : 'Use the dropdown to sort your library.';
 
@@ -192,9 +192,7 @@ function renderLibrary() {
     libraryList.appendChild(card);
   });
 
-  if (sortableInstance) {
-    sortableInstance.destroy();
-  }
+  if (sortableInstance) sortableInstance.destroy();
 
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
@@ -208,16 +206,14 @@ function renderLibrary() {
     onEnd: (evt) => {
       const fromIndex = evt.oldIndex;
       const toIndex = evt.newIndex;
-      if (fromIndex !== toIndex) {
-        reorderLibrary(fromIndex, toIndex);
-      }
+      if (fromIndex !== toIndex) reorderLibrary(fromIndex, toIndex);
     }
   });
 }
+
 // ======= REORDER LIBRARY (Drag-and-Drop Logic)=======
 function reorderLibrary(fromIndex, toIndex) {
   let currentCustomOrder = JSON.parse(localStorage.getItem('customOrder'));
-
   if (!currentCustomOrder || currentCustomOrder.length === 0) {
     currentCustomOrder = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
   }
@@ -239,13 +235,11 @@ function reorderLibrary(fromIndex, toIndex) {
 
 // ======= SORT SELECT EVENT LISTENER =======
 const sortSelect = document.getElementById('sortSelect');
-
 sortSelect.addEventListener('change', () => {
   const selectedSort = sortSelect.value;
   localStorage.setItem('sortMode', selectedSort);
   renderLibrary();
 });
-
 
 // ======= STATUS & REMOVE =======
 // - updateStatus()
@@ -313,25 +307,21 @@ function showBookPopUp(data, workKey, title = '') {
   popUp.classList.remove('hidden');
   document.body.classList.add('popUp-open');
 
-  closePopUp.onclick = () => {
-    popUp.classList.add('hidden');
-    document.body.classList.remove('popUp-open');
-  };
+  closePopUp.onclick = closeBookPopUp;
 
   popUp.onclick = (e) => {
-    if (e.target === popUp) {
-      popUp.classList.add('hidden');
-      document.body.classList.remove('popUp-open');
-    }
+    if (e.target === popUp) closeBookPopUp();
   };
 }
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    document.getElementById('bookPopUp').classList.add('hidden');
-    document.body.classList.remove('popUp-open');
-  }
+  if (e.key === 'Escape') closeBookPopUp();
 });
+
+function closeBookPopUp() {
+  document.getElementById('bookPopUp').classList.add('hidden');
+  document.body.classList.remove('popUp-open');
+}
 
 // ======= UTILS =======
 // - slugifyTitle()
