@@ -126,10 +126,10 @@ function renderLibrary() {
       localStorage.setItem('customOrder', JSON.stringify(customOrder));
     }
   }
-
+  
   const sortNotice = document.getElementById('sortNotice');
   sortNotice.textContent =
-    sortMode === 'custom'
+  sortMode === 'custom'
       ? 'Drag-and-drop sorting enabled. Rearrange your books as you like!'
       : 'Use the dropdown to sort your library.';
 
@@ -161,9 +161,14 @@ function renderLibrary() {
     const safeKey = book.key.replace(/[^\w-]/g, '-');
     const statusId = `status-${safeKey}-${index}`;
     card.classList.add('book-card');
-    card.setAttribute('draggable', 'true');
     card.setAttribute('data-index', index);
+
+    // Add a visible drag handle so scrolling works anywhere else on the card
+    // (dragging only starts from the handle)
+    const dragHandle = `<div class="drag-handle" aria-label="Drag to reorder" title="Drag to reorder">☰</div>`;
+
     card.innerHTML = `
+      ${dragHandle}
       <img src="${book.cover}" alt="Cover of ${book.title} by ${book.author}" />
       <strong>${book.title}</strong>
       <em>${book.author}</em>
@@ -192,21 +197,27 @@ function renderLibrary() {
     libraryList.appendChild(card);
   });
 
-  if (sortableInstance) sortableInstance.destroy();
+  if (sortableInstance) {
+    sortableInstance.destroy();
+  }
 
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
   sortableInstance = new Sortable(libraryList, {
     animation: 150,
     ghostClass: 'dragging',
+    handle: '.drag-handle',      // only drag from the handle
     ...(isTouchDevice && {
-      delay: 200,
-      touchStartThreshold: 5,
+      delay: 0,                  // no long-press needed now that we use a handle
+      touchStartThreshold: 3,
     }),
+    fallbackOnBody: true,
     onEnd: (evt) => {
       const fromIndex = evt.oldIndex;
       const toIndex = evt.newIndex;
-      if (fromIndex !== toIndex) reorderLibrary(fromIndex, toIndex);
+      if (fromIndex !== toIndex) {
+        reorderLibrary(fromIndex, toIndex);
+      }
     }
   });
 }
@@ -214,6 +225,7 @@ function renderLibrary() {
 // ======= REORDER LIBRARY (Drag-and-Drop Logic)=======
 function reorderLibrary(fromIndex, toIndex) {
   let currentCustomOrder = JSON.parse(localStorage.getItem('customOrder'));
+
   if (!currentCustomOrder || currentCustomOrder.length === 0) {
     currentCustomOrder = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
   }
@@ -235,6 +247,7 @@ function reorderLibrary(fromIndex, toIndex) {
 
 // ======= SORT SELECT EVENT LISTENER =======
 const sortSelect = document.getElementById('sortSelect');
+
 sortSelect.addEventListener('change', () => {
   const selectedSort = sortSelect.value;
   localStorage.setItem('sortMode', selectedSort);
@@ -310,18 +323,22 @@ function showBookPopUp(data, workKey, title = '') {
   closePopUp.onclick = closeBookPopUp;
 
   popUp.onclick = (e) => {
-    if (e.target === popUp) closeBookPopUp();
+    if (e.target === popUp) {
+      closeBookPopUp();
+    }
   };
 }
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeBookPopUp();
-});
 
 function closeBookPopUp() {
   document.getElementById('bookPopUp').classList.add('hidden');
   document.body.classList.remove('popUp-open');
 }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeBookPopUp();
+  }
+});
 
 // ======= UTILS =======
 // - slugifyTitle()

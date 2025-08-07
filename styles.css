@@ -111,7 +111,7 @@ nav button.active-tab {
   border-radius: 4px;
   text-align: center;
   transition: transform 0.2s ease;
-  touch-action: none;
+  touch-action: pan-y;
 }
 
 .book-card:hover {
@@ -316,4 +316,15 @@ button:focus {
   #libraryList {
     grid-template-columns: 1fr;
   }
+}
+
+.drag-handle {
+  cursor: grab;
+  user-select: none;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.drag-handle:active { 
+  cursor: grabbing; 
 }
