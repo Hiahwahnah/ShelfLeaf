@@ -1,17 +1,8 @@
 # ShelfLeaf  
-A lightweight, no-login book tracker built for readers who want simple control over their personal library.
+A lightweight, no-login book tracker. Search real books via Open Library, save titles to your library, set reading status, sort, and drag-drop to reorder — all saved locally in your browser.
 
 ### Live Demo  
-Check out the live version here: [https://shelf-leaf.vercel.app](https://shelf-leaf.vercel.app)
-
-## Overview  
-ShelfLeaf is a clean, responsive web app that lets you search for books using the Open Library API and build your own personal library right in your browser. You can track what you're reading, mark what you’ve finished, and save books you want to check out later — all without creating an account.
-
-You can reorder your saved books via drag-and-drop and sort them by title or status — all in a fully responsive, no-login experience.
-
-This project was created as a capstone for the Code:You Web Development program to demonstrate skills in HTML, CSS, JavaScript, API integration, and responsive design.
-
----
+**https://shelf-leaf.vercel.app**
 
 ## Features
 
@@ -25,10 +16,7 @@ This project was created as a capstone for the Code:You Web Development program 
   Mark each book as Want to Read, Reading, or Read — and switch statuses whenever you like.
 
 - **Sort Your Library**  
-  Use a dropdown to sort books by title (A–Z or Z–A) or by reading status for better organization.
-
-- **Drag-and-Drop Reordering**  
-  Reorder books in your library manually with a simple drag-and-drop interface. The new order is saved automatically.
+  Use a dropdown to sort books by default, title (A–Z or Z–A), reading status, or use drag and drop for custom sorting for better organization.
 
 - **More Info Pop-up**  
   Click “More Info” to view a detailed description, subjects, and a link to the full Open Library page.
@@ -39,57 +27,72 @@ This project was created as a capstone for the Code:You Web Development program 
 - **Responsive Design**  
   ShelfLeaf looks and works great on phones, tablets, and desktops thanks to mobile-first CSS with Flexbox, Grid, and media queries.
 
-- **Helpful Error Messages**  
-  Friendly guidance when searches return nothing, or something goes wrong.
+---
+
+## Built With
+
+- **HTML5**, **CSS3** (variables, Grid/Flex, media queries)  
+- **JavaScript (ES6)**  
+- **Open Library API**  
+- **localStorage** for persistence  
+- **SortableJS** for drag-and-drop  
 
 ---
 
 ## How to Run This Project
 
-
 ### Option 1: Use the Live Demo  
 Visit the hosted version here:  
-[https://shelf-leaf.vercel.app](https://shelf-leaf.vercel.app)
+**https://shelf-leaf.vercel.app**  
 
 No setup required — just open the link in your browser and start searching, saving, and organizing books.
 
----
-
 ### Option 2: Run Locally
-
-1. Clone or download this repository to your computer.
-2. Open `index.html` in any modern browser (Chrome, Firefox, Safari, Edge).
-3. That’s it. No setup or installation needed.
+1. Clone or download this repository to your computer.  
+2. Open `index.html` in any modern browser (Chrome, Firefox, Safari, Edge).  
+3. Start searching and saving books — no installation required.
 
 ---
 
-## Built With
+## Privacy
 
-- HTML5  
-- CSS3 (Flexbox + Grid)  
-- JavaScript (ES6)  
-- Open Library API  
-- `localStorage` for browser-based persistence
+ShelfLeaf does **not** send your library anywhere. All data lives in your browser via `localStorage`.
+
+---
+
+## Known Limitations
+
+- Open Library metadata can be incomplete (missing covers, sparse descriptions).  
+- Some covers may not exist for certain editions.  
+- Native `<select>` menus render slightly differently across browsers/OS.
 
 ---
 
 ## Capstone Requirements Met
 
-- Integrated a third-party API (Open Library)
-- Responsive design with media queries, Flexbox, and Grid for mobile/desktop support
-- Persistent data using `localStorage` for saved book library
-- Real-time UI updates with array/object manipulation
-- Duplicate prevention using unique keys
-- Visually appealing, accessible, and user-friendly interface
-- 10+ distinct Git commits made using terminal commands
-- README includes a project overview, feature list, instructions, and future improvements
+- **Third-Party API Integration** – Uses the Open Library API to search and retrieve book details.  
+- **Responsive Design** – Mobile-first layout with CSS Grid, Flexbox, and media queries.  
+- **Persistent Data Storage** – Saves library data, status, and sort order in `localStorage`.  
+- **Dynamic User Interface** – Real-time updates and drag-and-drop reordering with SortableJS.  
+- **Error Handling** – Messages for no results, duplicates, and missing covers.  
+- **Accessibility** – High contrast themes, focus outlines, and descriptive alt text.  
+- **Version Control** – 10+ meaningful Git commits with clear messages.  
+- **Documentation** – README explains purpose, features, setup, and requirements met.
+
 ---
 
 ## Future Features
 
 - Genre/tag support based on book subjects  
 - Export/import personal library to file  
-- Light/dark theme switch
+- Light/dark theme switch  
+
+---
+
+## Credits
+
+- Book data & covers: **Open Library**  
+- Drag & drop: **SortableJS**
 
 ---
 

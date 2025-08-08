@@ -54,15 +54,18 @@ searchBtn.addEventListener('click', () => {
 function displayResults(books) {
   searchResults.innerHTML = '';
 
-  if (books.length === 0) {
+  if (!books || books.length === 0) {
     searchResults.innerHTML = "<p>Couldn't find anything. Maybe check your spelling or try something different.</p>";
     return;
   }
 
   books.slice(0, 12).forEach(book => {
-    const key = book.key || book.cover_edition_key || `${book.title}-${book.author_name}`;
-    const title = book.title;
+    const title = book.title || 'Untitled';
     const author = book.author_name ? book.author_name.join(', ') : 'Unknown';
+    const key =
+      book.key ||
+      book.cover_edition_key ||
+      `${title}-${(book.author_name && book.author_name[0]) || 'unknown'}`;
     const cover = book.cover_i
       ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
       : 'https://wallpapers.com/images/high/red-leather-blank-book-cover-ja6121mqrx4crxz2-ja6121mqrx4crxz2.png';
@@ -70,7 +73,7 @@ function displayResults(books) {
     const card = document.createElement('div');
     card.classList.add('book-card');
     card.innerHTML = `
-      <img src="${cover}" alt="Cover of ${book.title} by ${book.author}" />
+      <img src="${cover}" alt="Cover of ${title} by ${author}" />
       <strong>${title}</strong>
       <em>${author}</em>
       <button class="addBtn">Add to Library</button>
@@ -82,7 +85,7 @@ function displayResults(books) {
     });
 
     card.querySelector('.infoBtn').addEventListener('click', () => {
-      getBookDetails(book.key, title);
+      getBookDetails(book.key || key, title);
     });
 
     searchResults.appendChild(card);
@@ -126,10 +129,10 @@ function renderLibrary() {
       localStorage.setItem('customOrder', JSON.stringify(customOrder));
     }
   }
-  
+
   const sortNotice = document.getElementById('sortNotice');
   sortNotice.textContent =
-  sortMode === 'custom'
+    sortMode === 'custom'
       ? 'Drag-and-drop sorting enabled. Rearrange your books as you like!'
       : 'Use the dropdown to sort your library.';
 
@@ -149,22 +152,31 @@ function renderLibrary() {
   }
 
   const libraryList = document.getElementById('libraryList');
+
+  if (sortableInstance) {
+    sortableInstance.destroy();
+    sortableInstance = null;
+  }
+
   libraryList.innerHTML = '';
 
   if (library.length === 0) {
     libraryList.innerHTML = '<p>Your library is empty.</p>';
+
+    const sortDropdown = document.getElementById('sortSelect');
+    if (sortDropdown) {
+      sortDropdown.value = localStorage.getItem('sortMode') || 'default';
+    }
     return;
   }
 
   library.forEach((book, index) => {
     const card = document.createElement('div');
-    const safeKey = book.key.replace(/[^\w-]/g, '-');
+    const safeKey = String(book.key).replace(/[^\w-]/g, '-');
     const statusId = `status-${safeKey}-${index}`;
     card.classList.add('book-card');
     card.setAttribute('data-index', index);
 
-    // Add a visible drag handle so scrolling works anywhere else on the card
-    // (dragging only starts from the handle)
     const dragHandle = `<div class="drag-handle" aria-label="Drag to reorder" title="Drag to reorder">☰</div>`;
 
     card.innerHTML = `
@@ -197,18 +209,14 @@ function renderLibrary() {
     libraryList.appendChild(card);
   });
 
-  if (sortableInstance) {
-    sortableInstance.destroy();
-  }
-
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
   sortableInstance = new Sortable(libraryList, {
     animation: 150,
     ghostClass: 'dragging',
-    handle: '.drag-handle',      // only drag from the handle
+    handle: '.drag-handle',
     ...(isTouchDevice && {
-      delay: 0,                  // no long-press needed now that we use a handle
+      delay: 0,
       touchStartThreshold: 3,
     }),
     fallbackOnBody: true,
@@ -263,17 +271,30 @@ function updateStatus(key, newStatus) {
     book.key === key ? { ...book, status: newStatus } : book
   );
   localStorage.setItem('shelfLeafLibrary', JSON.stringify(updated));
+
   setTimeout(() => {
     if (localStorage.getItem('sortMode') !== 'custom') {
       renderLibrary();
     }
-  }, 120); 
+  }, 120);
 }
 
 function removeBook(key) {
+  // Remove from main library
   const library = JSON.parse(localStorage.getItem('shelfLeafLibrary')) || [];
   const filtered = library.filter(book => book.key !== key);
   localStorage.setItem('shelfLeafLibrary', JSON.stringify(filtered));
+
+  let customOrder = JSON.parse(localStorage.getItem('customOrder')) || [];
+  if (customOrder.length) {
+    customOrder = customOrder.filter(book => book.key !== key);
+    localStorage.setItem('customOrder', JSON.stringify(customOrder));
+  }
+
+  if (filtered.length === 0) {
+    localStorage.setItem('sortMode', 'default');
+  }
+
   renderLibrary();
 }
 

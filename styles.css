@@ -17,6 +17,12 @@
   --status-read: #15803d;
   --status-reading: #1d4ed8;
   --status-want: #b45309;
+  --status-text: #fff;
+  --placeholder-color: #ccc;
+  --dropdown-bg: #444;
+  --dropdown-text: #fff;
+  --select-bg: #ffffff;
+  --select-text: #000000;
 }
 
 /* ========== RESET ========== */
@@ -100,9 +106,9 @@ nav button.active-tab {
 
 /* ========== BOOK CARD ========== */
 .book-card {
-  width: 180px;
+  width: auto;
   min-height: 300px;
-  margin: 10px;
+  margin: 0;
   padding: 10px;
   background-color: var(--card-bg);
   color: inherit;
@@ -159,20 +165,23 @@ nav button.active-tab {
   border-radius: 4px;
   border: 1px solid var(--select-border);
   font-weight: bold;
-  background-color: #444;
-  color: #fff;
+  background-color: var(--select-bg);
+  color: var(--select-text);
 }
 
 .statusSelect option[value="read"] {
   background-color: var(--status-read);
+  color: var(--status-text);
 }
 
 .statusSelect option[value="reading"] {
   background-color: var(--status-reading);
+  color: var(--status-text);
 }
 
 .statusSelect option[value="wantToRead"] {
   background-color: var(--status-want);
+  color: var(--status-text);
 }
 
 /* ========== POPUP ========== */
@@ -240,15 +249,24 @@ nav button.active-tab {
 
 /* ========== FORM FIELDS ========== */
 input,
-select,
+textarea,
+select {
+  background-color: var(--select-bg);
+  color: var(--select-text);
+  border: 1px solid var(--select-border);
+  font-size: 16px;
+}
+
+/* Buttons */
 button {
-  color: #fff;
-  background-color: #444;
-  border: 1px solid #666;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: 1px solid var(--select-border);
+  font-size: 16px;
 }
 
 input::placeholder {
-  color: #ccc;
+  color: var(--placeholder-color);
 }
 
 /* ========== FOCUS STYLES ========== */
@@ -281,21 +299,29 @@ button:focus {
     --status-read: #22c55e;
     --status-reading: #3b82f6;
     --status-want: #f59e0b;
+    --placeholder-color: #a0aec0;
+    --dropdown-bg: #2d3748;
+    --dropdown-text: #fefefe;
   }
 
   .book-card {
-    width: 80%;
-    max-width: 300px;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0.75rem;
+    min-height: 240px;
     text-align: left;
-    padding: 1rem;
-    margin: 0 auto;
-    min-height: 260px;
   }
 
   .book-card img {
     width: 100%;
     height: auto;
     margin-bottom: 0.5rem;
+  }
+
+  .page {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
   nav button {
@@ -317,10 +343,21 @@ button:focus {
 
   #searchResults,
   #libraryList {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+    gap: 0.75rem;
+  }
+
+}
+
+@media (max-width: 360px) {
+  #searchResults,
+  #libraryList {
     grid-template-columns: 1fr;
   }
 }
 
+/* ========== DRAG HANDLE ========== */
 .drag-handle {
   cursor: grab;
   user-select: none;
@@ -330,8 +367,4 @@ button:focus {
 
 .drag-handle:active { 
   cursor: grabbing; 
-}
-
-input, textarea, select, button {
-  font-size: 16px;  /* Ensures inputs are larger and no zooming occurs */
 }
