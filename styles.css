@@ -14,9 +14,9 @@
   --button-hover: #00757a;
   --button-text: #ffffff;
   --select-border: #0a9396;
-  --status-read: #bae6fd;
-  --status-reading: #fef08a;
-  --status-want: #fcd34d;
+  --status-read: #15803d;
+  --status-reading: #1d4ed8;
+  --status-want: #b45309;
 }
 
 /* ========== RESET ========== */
@@ -134,6 +134,8 @@ nav button.active-tab {
 }
 
 .book-card button {
+  display: block;
+  width: 100%;
   margin: 0.25rem auto;
   padding: 6px 12px;
   border: none;
@@ -142,6 +144,7 @@ nav button.active-tab {
   color: var(--button-text);
   cursor: pointer;
   transition: background-color 0.2s ease;
+  box-sizing: border-box;
 }
 
 .book-card button:hover {
@@ -275,13 +278,13 @@ button:focus {
     --button-hover: #38b2ac;
     --button-text: #fefefe;
     --select-border: #38b2ac;
-    --status-read: #60a5fa;
-    --status-reading: #facc15;
-    --status-want: #fb923c;
+    --status-read: #22c55e;
+    --status-reading: #3b82f6;
+    --status-want: #f59e0b;
   }
 
   .book-card {
-    width: 100%;
+    width: 80%;
     max-width: 300px;
     text-align: left;
     padding: 1rem;
@@ -298,7 +301,7 @@ button:focus {
   nav button {
     display: block;
     width: 100%;
-    margin: 0.25rem 0;
+    margin: 0.5rem 0;
   }
 
   #searchForm {
@@ -327,4 +330,8 @@ button:focus {
 
 .drag-handle:active { 
   cursor: grabbing; 
+}
+
+input, textarea, select, button {
+  font-size: 16px;  /* Ensures inputs are larger and no zooming occurs */
 }

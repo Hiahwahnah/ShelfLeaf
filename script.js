@@ -263,7 +263,11 @@ function updateStatus(key, newStatus) {
     book.key === key ? { ...book, status: newStatus } : book
   );
   localStorage.setItem('shelfLeafLibrary', JSON.stringify(updated));
-  renderLibrary();
+  setTimeout(() => {
+    if (localStorage.getItem('sortMode') !== 'custom') {
+      renderLibrary();
+    }
+  }, 120); 
 }
 
 function removeBook(key) {
